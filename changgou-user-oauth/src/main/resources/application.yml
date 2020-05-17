@@ -1,0 +1,61 @@
+server:
+  port: 9001
+spring:
+  application:
+    name: user-auth
+  #redis:
+  #  host: 192.168.6.130
+  #  port: 6379
+  #  password:
+  #  jedis:
+  #    pool:
+  #      max-active: 8
+  #      max-idle: 8
+  #      min-idle: 0
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.6.130:3307/changgou_oauth?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&serverTimezone=UTC
+    username: root
+    password: 123456
+  main:
+    allow-bean-definition-overriding: true
+
+  #在redis中连接redis集群
+  redis:
+    cluster:
+      nodes:
+        - 192.168.6.130:6379
+        - 192.168.6.131:6379
+        - 192.168.6.132:6379
+        - 192.168.6.133:6379
+        - 192.168.6.134:6379
+        - 192.168.6.135:6379
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:7001/eureka
+auth:
+  ttl: 3600  #token存储到redis的过期时间
+  clientId: changgou
+  clientSecret: changgou
+  cookieDomain: localhost
+  cookieMaxAge: -1
+encrypt:
+  key-store:
+    location: classpath:/changgou.jks  #证书路径
+    secret: changgou     #密钥
+    alias: changgou      #证书的别名
+    password: changgou   #证书的密码(证书里包含公钥私钥 公钥加密,私钥解密->非对称加密算法 RSA )
+
+#redis集群配置
+#redis-trib.rb: ruby的脚本对象,用来实现redis集群创建,在redis压缩文件的解压安装包中
+#create: 创建集群
+#--replicas: 添加主从
+#1: 集群和主从之间的筛选采取随机策略
+#IP:端口   参与集群和主从配置的节点信息
+#./redis-trib.rb create --replicas 1 192.168.6.130:6379 192.168.6.131:6379 192.168.6.132:6379 192.168.6.133:6379 192.168.6.134:6379 192.168.6.135:6379
+
+

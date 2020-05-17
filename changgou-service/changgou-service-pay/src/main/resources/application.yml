@@ -1,0 +1,57 @@
+server:
+  port: 18089
+spring:
+  application:
+    name: pay
+  main:
+    allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
+  rabbitmq:
+    host: 192.168.6.130
+    port: 5672
+    username: user
+    password: 123456
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:7001/eureka
+  instance:
+    prefer-ip-address: true
+feign:
+  hystrix:
+    enabled: true
+#hystrix 配置
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          #如果enabled设置为false，则请求超时交给ribbon控制
+          enabled: true
+        isolation:
+          strategy: SEMAPHORE
+          thread:
+            # 熔断器超时时间，默认：1000/毫秒
+            timeoutInMilliseconds: 20000
+#微信支付信息配置
+wxpay:
+  #应用ID
+  appid: wx8397f8696b538317
+  #商户ID
+  partner: 1473426802
+  #密钥
+  partnerkey: T6m9iK73b0kn9g5v426MKfHQH7X8rKwb
+  #支付回调地址
+  notify_url: http://weizhaohui.cross.echosite.cn/weixin/pay/notify/url
+
+#支付交换机和队列,工作中一般手动后台创建,因为程序中一旦创建不成功,监听就会报错
+mq:
+  pay:
+    exchange:
+      order: exchange.order
+      seckillorder: exchange.seckillorder
+    queue:
+      order: queue.order
+      seckillorder: queue.seckillorder
+    routing:
+      key: queue.order
+      seckillkey: queue.seckillorder
